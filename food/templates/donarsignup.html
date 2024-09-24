@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+
+{% load widget_tweaks %}
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>ZERO FOOD</title>
+  <style type="text/css">
+    body {
+      color: #aa082e;
+      background-color: #b6bde7;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    a:link {
+      text-decoration: none;
+    }
+
+    .note {
+      text-align: center;
+      height: 80px;
+      background: -webkit-linear-gradient(left, #0072ff, #8811c5);
+      color: #fff;
+      font-weight: bold;
+      line-height: 80px;
+    }
+
+    .form-content {
+      padding: 5%;
+      border: 1px solid #ced4da;
+      margin-bottom: 2%;
+    }
+
+    .form-control {
+      border-radius: 1.5rem;
+    }
+
+    .btnSubmit {
+      border: none;
+      border-radius: 1.5rem;
+      padding: 1%;
+      width: 20%;
+      cursor: pointer;
+      background: #0062cc;
+      color: #fff;
+    }
+
+    .error {
+      color: red;
+      font-size: 12px;
+    }
+  </style>
+
+  <script>
+    function validateForm() {
+      let isValid = true;
+
+      let firstName = document.getElementById("id_first_name").value;
+      let lastName = document.getElementById("id_last_name").value;
+      let username = document.getElementById("id_username").value;
+      let password = document.getElementById("id_password").value;
+      let companyName = document.getElementById("id_company_name").value;
+      let mobile = document.getElementById("id_mobile").value;
+      let email = document.getElementById("id_email").value;
+
+      // Clear previous errors
+      document.getElementById("firstNameError").innerHTML = "";
+      document.getElementById("lastNameError").innerHTML = "";
+      document.getElementById("usernameError").innerHTML = "";
+      document.getElementById("passwordError").innerHTML = "";
+      document.getElementById("companyError").innerHTML = "";
+      document.getElementById("mobileError").innerHTML = "";
+      document.getElementById("emailError").innerHTML = "";
+
+      if (firstName == "") {
+        document.getElementById("firstNameError").innerHTML = "First Name is required";
+        isValid = false;
+      }
+      if (lastName == "") {
+        document.getElementById("lastNameError").innerHTML = "Last Name is required";
+        isValid = false;
+      }
+      if (username == "") {
+        document.getElementById("usernameError").innerHTML = "Username is required";
+        isValid = false;
+      }
+      if (password == "" || password.length < 6) {
+        document.getElementById("passwordError").innerHTML = "Password must be at least 6 characters";
+        isValid = false;
+      }
+      if (companyName == "") {
+        document.getElementById("companyError").innerHTML = "Company Name is required";
+        isValid = false;
+      }
+      if (mobile == "" || !/^\d{10}$/.test(mobile)) {
+        document.getElementById("mobileError").innerHTML = "Mobile number must be 10 digits";
+        isValid = false;
+      }
+      const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,6}$/;
+      if (email == "" || !emailPattern.test(email)) {
+        document.getElementById("emailError").innerHTML = "Please enter a valid email";
+        isValid = false;
+      }
+
+      return isValid;
+    }
+  </script>
+
+</head>
+
+<body>
+  {% include "navbar.html" %}
+  <br><br><br><br>
+
+  <!--- signup page for donor by admin  ---------->
+  <form name="donorForm" method="post" onsubmit="return validateForm()">
+    {% csrf_token %}
+    <div class="container register-form">
+      <div class="form">
+        <div class="note">
+          <p>New Donor</p>
+        </div>
+
+        <div class="form-content">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                {% render_field form1.first_name class="form-control" placeholder="First Name" id="id_first_name" %}
+                <span id="firstNameError" class="error"></span>
+              </div>
+              <div class="form-group">
+                {% render_field form1.username class="form-control" placeholder="Username" id="id_username" %}
+                <span id="usernameError" class="error"></span>
+              </div>
+              <div class="form-group">
+                {% render_field form2.company_name class="form-control" placeholder="Company Name" id="id_company_name" %}
+                <span id="companyError" class="error"></span>
+              </div>
+              <div class="form-group">
+                {% render_field form2.mobile class="form-control" placeholder="Mobile" id="id_mobile" %}
+                <span id="mobileError" class="error"></span>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                {% render_field form1.last_name class="form-control" placeholder="Last Name" id="id_last_name" %}
+                <span id="lastNameError" class="error"></span>
+              </div>
+              <div class="form-group">
+                {% render_field form1.password class="form-control" placeholder="Password" id="id_password" %}
+                <span id="passwordError" class="error"></span>
+              </div>
+              <div class="form-group">
+                {% render_field form2.address class="form-control" placeholder="Address" %}
+              </div>
+              <div class="form-group">
+                {% render_field form2.email class="form-control" placeholder="Email Id" id="id_email" %}
+                <span id="emailError" class="error"></span>
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btnSubmit">Apply as a Donor</button>
+          <div class="text-center">Already have an account? <a href="/donarlogin">Login here</a></div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  {% include "footer.html" %}
+</body>
+
+</html>
